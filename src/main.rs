@@ -31,8 +31,8 @@ fn main() {
                 Err(e) => {
                     println!("Error: {}", e);
                     if e.to_string().contains("Connection reset by peer") {
-                        println!("=> Connection reset by peer, sleeping for 10 seconds");
-                        thread::sleep(Duration::from_millis(10*1000));
+                        println!("=> Connection reset by peer");
+                        pause(10);
                     }
                     continue;
                 }
@@ -43,8 +43,8 @@ fn main() {
             }
 
             if whois_answer.contains("access control limit exceeded") {
-                println!("=> Access control limit exceeded, sleeping for 10 seconds");
-                thread::sleep(Duration::from_millis(10*1000));
+                println!("=> Access control limit exceeded");
+                pause(10);
                 continue
             }
             done.push(domain.to_string());
@@ -52,6 +52,12 @@ fn main() {
             thread::sleep(Duration::from_millis(200));
         }
     }
+}
+
+fn pause(seconds: i32) {
+    let milliseconds = 10 * 1000;
+    println!("==> Sleeping for {} seconds", seconds);
+    thread::sleep(Duration::from_millis(milliseconds));
 }
 
 fn get_words() -> Vec<String> {
